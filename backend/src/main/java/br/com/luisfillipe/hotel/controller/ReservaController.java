@@ -11,5 +11,19 @@ import br.com.luisfillipe.hotel.model.*; import br.com.luisfillipe.hotel.reposit
   if(!q.isDisponivel()) throw new IllegalStateException("Quarto indisponivel");
   r.setHospede(h); r.setQuarto(q); r.setStatus(StatusReserva.RESERVADA); q.setDisponivel(false); qr.save(q); return rr.save(r);
  }
- @PatchMapping("/{id}/cancelar") public Reserva cancelar(@PathVariable Long id){Reserva r=rr.findById(id).orElseThrow();r.setStatus(StatusReserva.CANCELADA);r.getQuarto().setDisponivel(true);qr.save(r.getQuarto());return rr.save(r);}
+ @PatchMapping("/{id}/check-in") public Reserva checkIn(@PathVariable Long id){
+  Reserva r=rr.findById(id).orElseThrow();
+  if(r.getStatus()!=StatusReserva.RESERVADA) throw new IllegalStateException("Reserva não está disponível para check-in");
+  r.setStatus(StatusReserva.CHECK_IN); return rr.save(r);
+ }
+ @PatchMapping("/{id}/check-out") public Reserva checkOut(@PathVariable Long id){
+  Reserva r=rr.findById(id).orElseThrow();
+  if(r.getStatus()!=StatusReserva.CHECK_IN) throw new IllegalStateException("Reserva não está em check-in");
+  r.setStatus(StatusReserva.CHECK_OUT); r.getQuarto().setDisponivel(true); qr.save(r.getQuarto()); return rr.save(r);
+ }
+ @PatchMapping("/{id}/cancelar") public Reserva cancelar(@PathVariable Long id){
+  Reserva r=rr.findById(id).orElseThrow();
+  if(r.getStatus()==StatusReserva.CHECK_OUT||r.getStatus()==StatusReserva.CANCELADA) throw new IllegalStateException("Reserva não pode ser cancelada");
+  r.setStatus(StatusReserva.CANCELADA); r.getQuarto().setDisponivel(true); qr.save(r.getQuarto()); return rr.save(r);
+ }
 }
