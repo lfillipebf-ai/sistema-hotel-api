@@ -9,7 +9,7 @@ Java 17 · Spring Boot 3.5.6 · Spring Data JPA · PostgreSQL · Maven · Docker
 - Cadastro de hóspedes
 - Cadastro de quartos e categorias
 - Controle de disponibilidade
-- Reservas com check-in e check-out
+- Reservas, check-in e check-out
 - Cancelamento de reservas
 - Consulta de reservas por período
 - Persistência em PostgreSQL
@@ -29,6 +29,8 @@ API: `http://localhost:8080`
 - GET `/api/reservas`
 - GET `/api/reservas/periodo?inicio=...&fim=...`
 - POST `/api/reservas`
+- PATCH `/api/reservas/{id}/check-in`
+- PATCH `/api/reservas/{id}/check-out`
 - PATCH `/api/reservas/{id}/cancelar`
 
 **Autor:** Luis Fillipe Backer Faria  
