@@ -11,5 +11,19 @@ services:
       - "5432:5432"
     volumes:
       - hotel_data:/var/lib/postgresql/data
+
+  backend:
+    build: ./backend
+    container_name: hotel-backend
+    restart: unless-stopped
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/hotel
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+
 volumes:
   hotel_data:
